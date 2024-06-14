@@ -158,5 +158,5 @@ class SubsetDataset(Dataset):
 
     def __len__(self):
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        return self.subset_len
         # ========================
