@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, IterableDataset
 
 
 def random_labelled_image(
-    shape: Tuple[int, ...], num_classes: int, low=0, high=255, dtype=torch.int,
+    shape: [int, ...], num_classes: int, low=0, high=255, dtype=torch.int,
 ) -> Tuple[Tensor, int]:
     """
     Generates a random image and a random class label for it.
@@ -20,8 +20,9 @@ def random_labelled_image(
     # TODO:
     #  Implement according to the docstring description.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
-    # ========================
+    image = torch.randint(low, high, shape, dtype=torch.int)
+    label = torch.randint(0, num_classes, (1,), dtype=torch.int).item()
+
     return image, label
 
 
@@ -36,17 +37,14 @@ def torch_temporary_seed(seed: int):
     #  Implement this context manager as described.
     #  See torch.random.get/set_rng_state(), torch.random.manual_seed().
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
-    # ========================
+
+    initial_state = torch.random.get_rng_state()
+
     try:
-        # ====== YOUR CODE: ======
-        raise NotImplementedError()
-        # ========================
+        torch.random.manual_seed(seed)
         yield
     finally:
-        # ====== YOUR CODE: ======
-        raise NotImplementedError()
-        # ========================
+        torch.random.set_rng_state(initial_state)
 
 
 class RandomImageDataset(Dataset):
@@ -82,7 +80,11 @@ class RandomImageDataset(Dataset):
         #  the random state outside this method.
         #  Raise a ValueError if the index is out of range.
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        if index < 0 or index >= self.num_samples:
+            raise ValueError()
+        with torch_temporary_seed(index):
+            return random_labelled_image(self.image_dim, self.num_classes)
+
         # ========================
 
     def __len__(self):
