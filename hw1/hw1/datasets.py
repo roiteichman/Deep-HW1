@@ -17,8 +17,6 @@ def random_labelled_image(
     :param dtype: Data type of the returned image tensor.
     :return: A tuple containing the generated image tensor and it's label.
     """
-    # TODO:
-    #  Implement according to the docstring description.
     # ====== YOUR CODE: ======
     image = torch.randint(low, high, shape, dtype=torch.int)
     label = torch.randint(0, num_classes, (1,), dtype=torch.int).item()
@@ -33,9 +31,7 @@ def torch_temporary_seed(seed: int):
     number generator state back to its previous state.
     :param seed: The temporary seed to set.
     """
-    # TODO:
-    #  Implement this context manager as described.
-    #  See torch.random.get/set_rng_state(), torch.random.manual_seed().
+
     # ====== YOUR CODE: ======
 
     initial_state = torch.random.get_rng_state()
@@ -73,12 +69,6 @@ class RandomImageDataset(Dataset):
         Raises a ValueError if index is out of range.
         """
 
-        # TODO:
-        #  Create a random image tensor and return it.
-        #  Make sure to always return the same image for the
-        #  same index (make it deterministic per index), but don't mess-up
-        #  the random state outside this method.
-        #  Raise a ValueError if the index is out of range.
         # ====== YOUR CODE: ======
         if index < 0 or index >= self.num_samples:
             raise ValueError()
@@ -118,9 +108,6 @@ class ImageStreamDataset(IterableDataset):
         :return: An iterator providing an infinite stream of random labelled images.
         """
 
-        # TODO:
-        #  Yield tuples to produce an iterator over random images and labels.
-        #  The iterator should produce an infinite stream of data.
         # ====== YOUR CODE: ======
         while True:
             yield random_labelled_image(shape=self.image_dim, num_classes=self.num_classes)
@@ -147,9 +134,6 @@ class SubsetDataset(Dataset):
         self.offset = offset
 
     def __getitem__(self, index):
-        # TODO:
-        #  Return the item at index + offset from the source dataset.
-        #  Raise an IndexError if index is out of bounds.
         # ====== YOUR CODE: ======
         if index < 0 or index >= self.subset_len:
             raise IndexError()
