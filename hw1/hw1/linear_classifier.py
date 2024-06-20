@@ -23,7 +23,9 @@ class LinearClassifier(object):
 
         self.weights = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+
+        self.weights = torch.randn(n_features + 1, n_classes) * weight_std
+
         # ========================
 
     def predict(self, x: Tensor):
@@ -45,7 +47,12 @@ class LinearClassifier(object):
 
         y_pred, class_scores = None, None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        x = torch.cat([torch.ones(x.shape[0], 1), x], dim=1)
+
+        class_scores = torch.mm(x, self.weights)
+
+        # Predict the class with the highest score for each sample
+        y_pred = torch.argmax(class_scores, dim=1)
         # ========================
 
         return y_pred, class_scores
@@ -66,7 +73,7 @@ class LinearClassifier(object):
 
         acc = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        acc = (y == y_pred).float().mean().item()
         # ========================
 
         return acc * 100
