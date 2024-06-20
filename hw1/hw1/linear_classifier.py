@@ -17,15 +17,9 @@ class LinearClassifier(object):
         self.n_features = n_features
         self.n_classes = n_classes
 
-        # TODO:
-        #  Create weights tensor of appropriate dimensions
-        #  Initialize it from a normal dist with zero mean and the given std.
-
         self.weights = None
         # ====== YOUR CODE: ======
-
-        self.weights = torch.randn(n_features + 1, n_classes) * weight_std
-
+        self.weights = torch.normal(mean=0, std=weight_std, size=(n_features+1, n_classes))
         # ========================
 
     def predict(self, x: Tensor):
@@ -40,18 +34,11 @@ class LinearClassifier(object):
                 per sample.
         """
 
-        # TODO:
-        #  Implement linear prediction.
-        #  Calculate the score for each class using the weights and
-        #  return the class y_pred with the highest score.
-
-        y_pred, class_scores = None, None
         # ====== YOUR CODE: ======
         x = torch.cat([torch.ones(x.shape[0], 1), x], dim=1)
 
         class_scores = torch.mm(x, self.weights)
 
-        # Predict the class with the highest score for each sample
         y_pred = torch.argmax(class_scores, dim=1)
         # ========================
 
@@ -66,10 +53,6 @@ class LinearClassifier(object):
         :param y_pred: A tensor of shape (N,) containing predicted labels.
         :return: The accuracy in percent.
         """
-
-        # TODO:
-        #  calculate accuracy of prediction.
-        #  Do not use an explicit loop.
 
         acc = None
         # ====== YOUR CODE: ======
@@ -109,7 +92,28 @@ class LinearClassifier(object):
             #     using the weight_decay parameter.
 
             # ====== YOUR CODE: ======
-            raise NotImplementedError()
+            for x, y in dl_train:
+                y_pred, class_scores = self.predict(x)
+                loss = loss_fn.loss(x, y, class_scores, y_pred)
+                # adding regularization term
+                loss += weight_decay * torch.sum(self.weights ** 2)
+                # gradient step
+                self.weights -= learn_rate * loss_fn.grad()
+
+                total_correct += torch.sum(y == y_pred).item()
+                average_loss += loss.item()
+                train_res.loss.append(loss.item())
+                train_res.accuracy.append(self.evaluate_accuracy(y, y_pred))
+
+            # evaluate on validation set
+            for x, y in dl_valid:
+                y_pred, class_scores = self.predict(x)
+                loss = loss_fn.loss(x, y, class_scores, y_pred)
+                # adding regularization term
+                loss += weight_decay * torch.sum(self.weights ** 2)
+                valid_res.loss.append(loss.item())
+                valid_res.accuracy.append(self.evaluate_accuracy(y, y_pred))
+
             # ========================
             print(".", end="")
 
@@ -130,11 +134,11 @@ class LinearClassifier(object):
         #  The output shape should be (n_classes, C, H, W).
 
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        #TODO: should be self.weights[1:]
+        w = self.weights[2:] if has_bias else self.weights
+        w_images = w.t().view((self.n_classes, *img_shape))
         # ========================
-
         return w_images
-
 
 def hyperparams():
     hp = dict(weight_std=0.0, learn_rate=0.0, weight_decay=0.0)
@@ -143,7 +147,9 @@ def hyperparams():
     #  Manually tune the hyperparameters to get the training accuracy test
     #  to pass.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    hp['weight_std'] = 0.0001
+    hp['learn_rate'] = 0.1
+    hp['weight_decay'] = 0.001
     # ========================
 
     return hp

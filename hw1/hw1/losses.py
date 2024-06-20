@@ -42,22 +42,27 @@ class SVMHingeLoss(ClassifierLoss):
         assert x_scores.shape[0] == y.shape[0]
         assert y.dim() == 1
 
-        # TODO: Implement SVM loss calculation based on the hinge-loss formula.
-        #  Notes:
-        #  - Use only basic pytorch tensor operations, no external code.
-        #  - Full credit will be given only for a fully vectorized
-        #    implementation (zero explicit loops).
-        #    Hint: Create a matrix M where M[i,j] is the margin-loss
-        #    for sample i and class j (i.e. s_j - s_{y_i} + delta).
-
-        loss = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        N = x.shape[0]
+
+        x = torch.cat([torch.ones(N, 1), x], dim=1)
+
+        margins = x_scores - x_scores[torch.arange(N), y].view(-1, 1) + self.delta
+
+        margins[torch.arange(N), y] = 0
+
+        loss_i = torch.sum(torch.maximum(torch.zeros_like(margins), margins), dim=1)
+
+        loss = torch.mean(loss_i)
+
         # ========================
 
-        # TODO: Save what you need for gradient calculation in self.grad_ctx
+        # Save what you need for gradient calculation in self.grad_ctx
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        self.grad_ctx['x'] = x
+        self.grad_ctx['y'] = y
+        self.grad_ctx['x_scores'] = x_scores
+        self.grad_ctx['margins'] = margins
         # ========================
 
         return loss
@@ -68,14 +73,22 @@ class SVMHingeLoss(ClassifierLoss):
         :return: The gradient, of shape (D, C).
 
         """
-        # TODO:
-        #  Implement SVM loss gradient calculation
-        #  Same notes as above. Hint: Use the matrix M from above, based on
-        #  it create a matrix G such that X^T * G is the gradient.
 
-        grad = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
-        # ========================
+        x = self.grad_ctx['x']
+        y = self.grad_ctx['y']
+        x_scores = self.grad_ctx['x_scores']
+        margins = self.grad_ctx['margins']
+
+        N = x.shape[0]
+        G = torch.zeros_like(x_scores)
+
+        G[margins > 0] = 1
+
+        row_sum = torch.sum(G, dim=1)
+
+        G[torch.arange(N), y] = -row_sum
+
+        grad = x.t().mm(G) / N
 
         return grad

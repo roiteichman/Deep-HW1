@@ -28,14 +28,9 @@ Therefore, the model might overfit the test set and not generalize well.
 
 part2_q1 = r"""
 **Your answer:**
+The selection of $\Delta > 0$ is arbitrary because the regularization term ensures that the weight vectors remain bounded, and the relative trade-off between the margin size and model complexity can be adjusted through the regularization parameter 
+$\lambda$. Therefore, while $\Delta$ sets the margin width, its specific value can be scaled and adjusted without altering the overall learning process, due to the presence of the regularization term.
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
 
 """
 
