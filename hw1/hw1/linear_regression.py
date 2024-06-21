@@ -234,7 +234,7 @@ def cv_best_hyperparams(
         with some of the keys as returned by model.get_params()
     """
 
-    # TODO: Do K-fold cross validation to find the best hyperparameters
+    #  Do K-fold cross validation to find the best hyperparameters
     #  Notes:
     #  - You can implement it yourself or use the built in sklearn utilities
     #    (recommended). See the docs for the sklearn.model_selection package
@@ -247,7 +247,9 @@ def cv_best_hyperparams(
     #  - You can use MSE or R^2 as a score.
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    params = {'bostonfeaturestransformer__degree': degree_range, 'linearregressor__reg_lambda': lambda_range}
+    grid_search = sklearn.model_selection.GridSearchCV(model, params, cv=k_folds, scoring='neg_mean_squared_error')
+    grid_search.fit(X, y)
+    best_params = grid_search.best_params_
     # ========================
-
     return best_params
