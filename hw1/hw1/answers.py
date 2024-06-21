@@ -37,27 +37,17 @@ $\lambda$. Therefore, while $\Delta$ sets the margin width, its specific value c
 part2_q2 = r"""
 **Your answer:**
 
+From the plots above, we can see that the weights are derived from the image pixels: the brighter the pixel, the higher the corresponding weight value. For new predictions, the model classifies the sample as the class with the most similar average "lighting spread" to it.
+Classification errors can occur when trying to classify a sample that has two different classes that are relatively close, 
+for example, 6 and 5 or 4 and 9.
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
 
 """
 
 part2_q3 = r"""
-**Your answer:**
+1. The graphs show that the loss function decreases with each iteration while accuracy increases, indicating convergence to a low error and high accuracy. This suggests that our chosen learning rate is appropriate. A larger learning rate might have caused the model to miss the convergence point and diverge, whereas a smaller learning rate would have required many more iterations to reach convergence and optimal results.
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+2. Slightly overfitted – based on the graphs, we can see that the performance on the validation set is slightly less better than on the training set. This indicates a lack of sufficient generalization and suggests that the model is slightly overfitted to the training data.
 """
 
 # ==============

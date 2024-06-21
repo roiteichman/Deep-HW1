@@ -43,9 +43,7 @@ class SVMHingeLoss(ClassifierLoss):
         assert y.dim() == 1
 
         # ====== YOUR CODE: ======
-        N = x.shape[0]
-
-        x = torch.cat([torch.ones(N, 1), x], dim=1)
+        N = x_scores.shape[0]
 
         margins = x_scores - x_scores[torch.arange(N), y].view(-1, 1) + self.delta
 
