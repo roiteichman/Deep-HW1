@@ -28,11 +28,12 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
         X = check_array(X)
         check_is_fitted(self, "weights_")
 
-        # TODO: Calculate the model prediction, y_pred
+        # Calculate the model prediction, y_pred
 
         y_pred = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        y_pred = X @ self.weights_
+        y_pred = np.squeeze(y_pred)
         # ========================
 
         return y_pred
@@ -45,13 +46,16 @@ class LinearRegressor(BaseEstimator, RegressorMixin):
         """
         X, y = check_X_y(X, y)
 
-        # TODO:
+
         #  Calculate the optimal weights using the closed-form solution you derived.
         #  Use only numpy functions. Don't forget regularization!
 
         w_opt = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        N = X.shape[0]
+        lambda_mat = self.reg_lambda * np.eye(X.shape[1])
+        lambda_mat[0, 0] = 0
+        w_opt = np.linalg.inv((1/N)*X.T.dot(X) + lambda_mat).dot((1/N)*X.T).dot(y.reshape(-1, 1))
         # ========================
 
         self.weights_ = w_opt
@@ -75,9 +79,11 @@ def fit_predict_dataframe(
         features are used.
     :return: A vector of predictions, y_pred.
     """
-    # TODO: Implement according to the docstring description.
+    # Implement according to the docstring description.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    X = df[feature_names].values if feature_names is not None else df.drop(target_name, axis=1).values
+    y = df[target_name].values
+    y_pred = model.fit_predict(X, y)
     # ========================
     return y_pred
 
@@ -94,13 +100,12 @@ class BiasTrickTransformer(BaseEstimator, TransformerMixin):
         """
         X = check_array(X, ensure_2d=True)
 
-        # TODO:
         #  Add bias term to X as the first feature.
         #  See np.hstack().
 
         xb = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        xb = np.hstack((np.ones((X.shape[0], 1)), X))
         # ========================
 
         return xb
@@ -114,10 +119,18 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, degree=2):
         self.degree = degree
 
-        # TODO: Your custom initialization, if needed
+        """
+        In your implementation, remove the CHAS feature and apply the log function to the CRIM and LSTAT features. Return to the scatter matrix and make sure you understand why these would be reasonable choices.
+
+        Notes:
+
+        You can use the class PolynomialFeatures from sklearn.preprocessing to simplify generation of polynomial features.
+        """
+
+        # Your custom initialization, if needed
         # Add any hyperparameters you need and save them as above
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        self.poly = PolynomialFeatures(degree=self.degree, include_bias=False)
         # ========================
 
     def fit(self, X, y=None):
@@ -131,15 +144,16 @@ class BostonFeaturesTransformer(BaseEstimator, TransformerMixin):
         """
         X = check_array(X)
 
-        # TODO:
         #  Transform the features of X into new features in X_transformed
         #  Note: You CAN count on the order of features in the Boston dataset
         #  (this class is "Boston-specific"). For example X[:,1] is the second
         #  feature ('ZN').
 
-        X_transformed = None
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        X_no_chas = np.delete(X, 3, axis=1)
+        X_no_chas[:, 0] = np.log(X_no_chas[:, 0]+1)
+        X_no_chas[:, -1] = np.log(X_no_chas[:, -1]+1)
+        X_transformed = self.poly.fit_transform(X_no_chas)
         # ========================
 
         return X_transformed
@@ -160,10 +174,16 @@ def top_correlated_features(df: DataFrame, target_feature, n=5):
         correlated) feature is first.
     """
 
-    # TODO: Calculate correlations with target and sort features by it
+    # Calculate correlations with target and sort features by it
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    correlations = df.corr()[target_feature].drop(target_feature)
+
+    abs_correlations = correlations.abs()
+
+    top_n_features = abs_correlations.nlargest(n).index.tolist()
+
+    top_n_corr = correlations[top_n_features].values.tolist()
     # ========================
 
     return top_n_features, top_n_corr
@@ -177,9 +197,9 @@ def mse_score(y: np.ndarray, y_pred: np.ndarray):
     :return: MSE score.
     """
 
-    # TODO: Implement MSE using numpy.
+    # Implement MSE using numpy.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    mse = np.mean((y - y_pred) ** 2)
     # ========================
     return mse
 
@@ -192,9 +212,9 @@ def r2_score(y: np.ndarray, y_pred: np.ndarray):
     :return: R^2 score.
     """
 
-    # TODO: Implement R^2 using numpy.
+    # Implement R^2 using numpy.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    r2 = 1 - np.sum((y - y_pred) ** 2) / np.sum((y - np.mean(y)) ** 2)
     # ========================
     return r2
 
