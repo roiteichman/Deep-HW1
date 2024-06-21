@@ -78,7 +78,7 @@ class LinearClassifier(object):
             total_correct = 0
             average_loss = 0
 
-            # TODO:
+
             #  Implement model training loop.
             #  1. At each epoch, evaluate the model on the entire training set
             #     (batch by batch) and update the weights.
@@ -132,12 +132,7 @@ class LinearClassifier(object):
         :return: Tensor of shape (n_classes, C, H, W).
         """
 
-        # TODO:
-        #  Convert the weights matrix into a tensor of images.
-        #  The output shape should be (n_classes, C, H, W).
-
         # ====== YOUR CODE: ======
-        #TODO: should be self.weights[1:]
         w = self.weights[1:] if has_bias else self.weights
         w_images = w.t().view((self.n_classes, *img_shape))
         # ========================
@@ -146,9 +141,6 @@ class LinearClassifier(object):
 def hyperparams():
     hp = dict(weight_std=0.0, learn_rate=0.0, weight_decay=0.0)
 
-    # TODO:
-    #  Manually tune the hyperparameters to get the training accuracy test
-    #  to pass.
     # ====== YOUR CODE: ======
     hp['weight_std'] = 0.001
     hp['learn_rate'] = 0.01
