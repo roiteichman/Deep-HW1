@@ -92,6 +92,7 @@ class ImageStreamDataset(IterableDataset):
     A dataset representing an infinite stream of noise images of specified dimensions.
     """
 
+
     def __init__(self, num_classes: int, C: int, W: int, H: int):
         """
         :param num_classes: Number of classes (labels)

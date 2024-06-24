@@ -58,17 +58,27 @@ part2_q3 = r"""
 part3_q1 = r"""
 **Your answer:**
 
-We aim to generate a plot where the data points closely follow the linear model. By examining the plots, we can ascertain that cross-validation has resulted in improvement, as evidenced by smaller residuals post-validation. In the initial plot, the residuals were much larger compared to those in the final plot.
+We aim to generate a plot where the points are scattered randomly around the x-axis with a zero mean. By examining the plots, we can ascertain that cross-validation has resulted in improvement, as evidenced by smaller residuals post-validation. In the initial plot, the residuals were much larger compared to those in the final plot.
 """
 
 part3_q2 = r"""
 **Your answer:**
 
-1. The model remains a linear regression model even after incorporating non-linear features. Although the representation of the data changes with the addition of non-linear transformations, the underlying model structure remains linear. It continues to seek a linear combination of features that best fits the data.
+1. The model remains a linear regression model even after incorporating non-linear features.
+Although the representation of the data changes with the addition of non-linear transformations,
+the underlying model structure remains linear. It continues to seek a linear combination of
+features that best fits the data.
 
-2. Adding non-linear features allows us to represent the data in a transformed, non-linear space. Despite this transformation, the model's fundamental approach remains linear. Therefore, we can still establish a linear relationship between the transformed features and their corresponding coefficients, as the weights are applied linearly.
+2. Adding non-linear features allows us to represent the data in a transformed, non-linear space.
+Despite this transformation, the model's fundamental approach remains linear.
+Therefore, we can still establish a linear relationship between the transformed features and
+their corresponding coefficients, as the weights are applied linearly.
 
-3. In the context of a linear classification model, the decision boundary is defined by a hyperplane in the feature space. Even when non-linear features are introduced, the classifier remains linear in terms of its parameters and the decision rule it applies. However, the decision boundary in the original feature space may become non-linear due to the transformation. This approach is beneficial as it enables the model to learn and accommodate more complex decision boundaries.
+3. In the context of a linear classification model, the decision boundary is defined by a hyperplane
+in the feature space. Even when non-linear features are introduced, the classifier remains linear
+in terms of its parameters and the decision rule it applies. However, the decision boundary in the
+original feature space may become non-linear due to the transformation. This approach is beneficial
+as it enables the model to learn and accommodate more complex decision boundaries.
 
 """
 
