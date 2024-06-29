@@ -66,19 +66,13 @@ part3_q2 = r"""
 
 1. The model remains a linear regression model even after incorporating non-linear features.
 Although the representation of the data changes with the addition of non-linear transformations,
-the underlying model structure remains linear. It continues to seek a linear combination of
+the underlying model structure remains linear because it seeks a linear combination of
 features that best fits the data.
 
-2. Adding non-linear features allows us to represent the data in a transformed, non-linear space.
-Despite this transformation, the model's fundamental approach remains linear.
-Therefore, we can still establish a linear relationship between the transformed features and
-their corresponding coefficients, as the weights are applied linearly.
+2. Adding non-linear features allows us to represent the data in a transformed space that increases the flexability of the model.
+Therefore, we can fit any model with complex enough features.
 
-3. In the context of a linear classification model, the decision boundary is defined by a hyperplane
-in the feature space. Even when non-linear features are introduced, the classifier remains linear
-in terms of its parameters and the decision rule it applies. However, the decision boundary in the
-original feature space may become non-linear due to the transformation. This approach is beneficial
-as it enables the model to learn and accommodate more complex decision boundaries.
+3. The decision boundary in the original feature space will become non-linear due to the addition of non-linear features. However, in the new feature dimension, the decision boundary will be a hyperplane.
 
 """
 
