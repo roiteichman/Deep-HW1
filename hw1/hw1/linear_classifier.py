@@ -78,34 +78,36 @@ class LinearClassifier(object):
             total_correct = 0
             average_loss = 0
 
-
-            #  Implement model training loop.
-            #  1. At each epoch, evaluate the model on the entire training set
-            #     (batch by batch) and update the weights.
-            #  2. Each epoch, also evaluate on the validation set.
-            #  3. Accumulate average loss and total accuracy for both sets.
-            #     The train/valid_res variables should hold the average loss
-            #     and accuracy per epoch.
-            #  4. Don't forget to add a regularization term to the loss,
-            #     using the weight_decay parameter.
-
             # ====== YOUR CODE: ======
+            weights_old = self.weights.clone()
+
             for x, y in dl_train:
+                weights_new = self.weights.clone()
+                self.weights = weights_old.clone()
+
                 y_pred, class_scores = self.predict(x)
                 loss = loss_fn.loss(x, y, class_scores, y_pred)
                 # adding regularization term
                 loss += weight_decay * torch.sum(self.weights ** 2)
                 average_loss += loss.item()
                 total_correct += self.evaluate_accuracy(y, y_pred)
-                # gradient step
+
+                self.weights = weights_new.clone()
+
+                y_pred, class_scores = self.predict(x)
+                loss = loss_fn.loss(x, y, class_scores, y_pred)
                 self.weights -= learn_rate * loss_fn.grad()
 
             average_loss *= (dl_train.batch_size / len(dl_train))
-            train_res.accuracy.append(total_correct/len(dl_train))
+            total_correct /= len(dl_train)
+            train_res.accuracy.append(total_correct)
             train_res.loss.append(average_loss)
 
             # evaluate on validation set
             total_correct, average_loss = 0, 0
+            weights_new = self.weights.clone()
+            self.weights = weights_old.clone()
+
             for x, y in dl_valid:
                 y_pred, class_scores = self.predict(x)
                 loss = loss_fn.loss(x, y, class_scores, y_pred)
@@ -117,6 +119,7 @@ class LinearClassifier(object):
             valid_res.accuracy.append(total_correct/len(dl_valid))
             valid_res.loss.append(average_loss)
 
+            self.weights = weights_new.clone()
             # ========================
             print(".", end="")
 
