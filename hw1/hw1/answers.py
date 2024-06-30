@@ -47,7 +47,8 @@ for example, 6 and 5 or 4 and 9.
 part2_q3 = r"""
 1. The graphs show that the loss function decreases with each iteration while accuracy increases, indicating convergence to a low error and high accuracy. This suggests that our chosen learning rate is appropriate. A larger learning rate might have caused the model to miss the convergence point and diverge, whereas a smaller learning rate would have required many more iterations to reach convergence and optimal results.
 
-2. Slightly overfitted – based on the graphs, we can see that the performance on the validation set is slightly less better than on the training set. This indicates a lack of sufficient generalization and suggests that the model is slightly overfitted to the training data.
+2. Based on the graphs, we can see that the performance on the validation set is pretty similar to the performance on the training set. This indicates that the model generalizes well to unseen data and is not overfitted to the training data.
+However, if we must chose one of the options in the question so we will chose: Slightly overfitted. We can see that the accuracy on the train set is better than the accuracy on the validation set. This indicates a lack of sufficient generalization and suggests that the model is slightly overfitted to the training data.
 """
 
 # ==============
@@ -70,7 +71,7 @@ the underlying model structure remains linear because it seeks a linear combinat
 features that best fits the data.
 
 2. Adding non-linear features allows us to represent the data in a transformed space that increases the flexability of the model.
-Therefore, we can fit any model with complex enough features.
+Therefore, we can fit any model with complex enough features. However, it might not generalize well to unseen data.
 
 3. The decision boundary in the original feature space will become non-linear due to the addition of non-linear features. However, in the new feature dimension, the decision boundary will be a hyperplane.
 
